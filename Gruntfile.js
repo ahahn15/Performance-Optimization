@@ -1,5 +1,3 @@
-var mozjpeg = require('imagemin-mozjpeg');
-
 module.exports = function(grunt) {
 
   // Project configuration.
@@ -43,7 +41,7 @@ module.exports = function(grunt) {
           cwd: 'src/css',
           src: ['*.css', '!*.min.css'],
           dest: 'dist/css',
-          ext: '.min.css'
+          ext: '.css'
         }]
       }
     },
@@ -54,7 +52,8 @@ module.exports = function(grunt) {
         collapseWhitespace: true
       },
       files: {
-        'dist/index.html': 'src/index.html'
+        'dist/index.html': 'src/index.html',
+        'dist/views/pizza.html': 'src/views/pizza.html'
       }
     }
   }
