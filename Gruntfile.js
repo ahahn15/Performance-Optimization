@@ -67,9 +67,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
   // Default task(s).
-  grunt.registerTask('default', ['uglify']);
-  grunt.registerTask('default', ['imagemin']);
-  grunt.registerTask('default', ['cssmin']);
-  grunt.registerTask('default', ['htmlmin']);
+  grunt.registerTask('default', ['uglify','imagemin','htmlmin']);
 
 };
