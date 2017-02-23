@@ -400,6 +400,10 @@ var resizePizzas = function(size) {
 
   changeSliderLabel(size);
 
+  /** modify and combine two functions into one:
+    after eliminating getDx function, moved switch statement into changePizzaSizes
+    and modified to return size as a value between 0-100 and set with % instead of 
+    returning as a decimal and performing unnecessary calculations. **/
   function changePizzaSizes(size) {
 
     var newwidth = 0;
@@ -418,6 +422,7 @@ var resizePizzas = function(size) {
       console.log("bug in sizeSwitcher");
     }
 
+    // cache DOM element since it is reused
     var pizzas = document.getElementsByClassName('randomPizzaContainer');
     for (var i = 0; i < pizzas.length; i++) {
       pizzas[i].style.width = newwidth + "%";
@@ -454,9 +459,10 @@ function logAverageFrame(times) {
   console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
 }
 
-var items = document.getElementsByClassName('mover');
-
+/** extracted out a calculation that essentially returned one of 5 constants
+  and turned it into an array instead. Cache more DOM elements. **/
 function updatePositions() {
+  var items = document.getElementsByClassName('mover');
   frame++;
   window.performance.mark("mark_start_frame");
   var top = document.body.scrollTop;
