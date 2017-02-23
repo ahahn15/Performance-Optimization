@@ -4,29 +4,22 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
-      options: {
-        banner: '/*!<%= grunt.template.today("yyyy-mm-dd") %> */\n'
-      },
       my_target: {
-        files: {
-          'dist/js/perfmatters.js': ['src/js/perfmatters.js'],
-          'dist/views/js/main.js': ['src/views/js/main.js']
-        }
+        files: [{
+          expand: true,
+          cwd: 'src/js',
+          src: '*.js',
+          dest: 'dist/js'
+        }]
       }
     },
     imagemin: {
       dynamic: {
         files: [{
           expand: true,
-          cwd: 'src/img/',
+          cwd: 'src/',
           src: ['*.{png,jpg}'],
-          dest: 'dist/img/'
-        },
-        {
-          expand: true,
-          cwd: 'src/views/images/',
-          src: ['*.{png,jpg}'],
-          dest: 'dist/views/images/'
+          dest: 'dist/'
         }]
       }
     },
@@ -34,33 +27,28 @@ module.exports = function(grunt) {
       target: {
         files: [{
           expand: true,
-          cwd: 'src/css',
-          src: ['*.css', '!*.min.css'],
-          dest: 'dist/css',
-          ext: '.css'
-        },
-        {
-          expand: true,
           cwd: 'src/',
-          src: ['views/css/*.css', '!*.min.css'],
+          src: ['*.css'],
           dest: 'dist/',
           ext: '.css'
         }]
       }
     },
     htmlmin: {
-    dist: {
-      options: {
-        removeComments: true,
-        collapseWhitespace: true
-      },
-      files: {
-        'dist/index.html': 'src/index.html',
-        'dist/views/pizza.html': 'src/views/pizza.html'
+      dist: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true
+        },
+        files: [{
+          expand: true,
+          cwd: 'src/',
+          src: ['*.html'],
+          dest: 'dist/'
+        }]
       }
     }
-  }
-});
+  });
 
   // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-uglify');
