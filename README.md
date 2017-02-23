@@ -1,7 +1,8 @@
 # Website Performance Optimization project
-***Project #4 of the Udacity Front End Developer Nanodegree* **
+*Project #4 of the Udacity Front End Developer Nanodegree*
 
 This project required optimizing the critical rendering path in order to achieve:  
+
 1. A PageSpeed Insights score of at least 90 on index.html
 2. At least 60 fps scrolling and resizing pizza images on pizza.html
 
@@ -163,10 +164,10 @@ Mobile: 92/100      Desktop 95/100
 ###Part 2: 60 frames per second on pizza page (~10 ms)
 
 ####Before:
-Average scripting time to generate last 10 frames: 30.921000000000106ms
+Average scripting time to generate last 10 frames: 30.921000000000106ms  
 Time to resize pizzas: 89.32999999999993ms
 
 ####After:
 
-Average scripting time to generate last 10 frames: 0.01799999999998363ms
+Average scripting time to generate last 10 frames: 0.01799999999998363ms  
 Time to resize pizzas: 0.49499999999989086ms
