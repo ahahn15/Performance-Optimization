@@ -455,7 +455,6 @@ function logAverageFrame(times) {
 }
 
 var items = document.getElementsByClassName('mover');
-var length = items.length;
 
 function updatePositions() {
   frame++;
@@ -466,7 +465,7 @@ function updatePositions() {
     constArray.push(Math.sin((top / 1250) + i));
   }
 
-  for (var i = 0; i < length; i++) {
+  for (var i = 0; i < items.length; i++) {
     var phase = constArray[i % 5];
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
