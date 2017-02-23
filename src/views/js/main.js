@@ -428,10 +428,11 @@ var resizePizzas = function(size) {
     var container = document.querySelectorAll(".randomPizzaContainer");
     var length = container.length;
     for (var i = 0; i < length; i++) {
-      var dx = determineDx(container[i], size);
+      var element = container[i];
+      var dx = determineDx(element, size);
       var newwidth = (container[i].offsetWidth + dx) + 'px';
       requestAnimationFrame(function() {
-        container[i].style.width = newwidth;
+        element.style.width = newwidth;
       })
     }
   }
