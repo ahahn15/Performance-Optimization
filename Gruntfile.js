@@ -9,28 +9,24 @@ module.exports = function(grunt) {
       },
       my_target: {
         files: {
-          'dist/js/perfmatters.min.js': ['src/js/perfmatters.js'],
-          'dist/views/js/main.min.js': ['src/views/js/main.js']
+          'dist/js/perfmatters.js': ['src/js/perfmatters.js'],
+          'dist/views/js/main.js': ['src/views/js/main.js']
         }
       }
     },
     imagemin: {
-      static: {
-        options: {
-          optimizationLevel: 3,
-          svgoPlugins: [{ removeViewBox: false }]
-        },
-        files: {
-          'dist/views/images/pizza.png': 'src/views/images/pizza.png',
-          'dist/views/images/pizzeria.jpg': 'src/views/images/pizzeria.jpg'
-        }
-      },
       dynamic: {
         files: [{
           expand: true,
           cwd: 'src/img/',
-          src: ['**/*.{png,jpg}'],
+          src: ['*.{png,jpg}'],
           dest: 'dist/img/'
+        },
+        {
+          expand: true,
+          cwd: 'src/views/images/',
+          src: ['*.{png,jpg}'],
+          dest: 'dist/views/images/'
         }]
       }
     },
