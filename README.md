@@ -65,7 +65,48 @@ Resize images to 100px in width to match the size in the view. Use the Grunt tas
 
 ###Part 2: 60 frames per second on pizza page
 
-Replace more complex and less performant querySelectorAll methods with getElementsByClassName and getElementById. Optimize loops by extracting redundant calculations.
+Replace more complex and less performant querySelectorAll methods with getElementsByClassName and getElementById. 
+
+#### Before:
+```
+  function changeSliderLabel(size) {
+    switch(size) {
+      case "1":
+        document.querySelector("#pizzaSize").innerHTML = "Small";
+        return;
+      case "2":
+        document.querySelector("#pizzaSize").innerHTML = "Medium";
+        return;
+      case "3":
+        document.querySelector("#pizzaSize").innerHTML = "Large";
+        return;
+      default:
+        console.log("bug in changeSliderLabel");
+    }
+  }
+```
+
+#### After:
+```
+  // use getElementById instead of querySelector
+  function changeSliderLabel(size) {
+    switch(size) {
+      case "1":
+      document.getElementById('pizzaSize').innerHTML = "Small";
+      return;
+      case "2":
+      document.getElementById('pizzaSize').innerHTML = "Medium";
+      return;
+      case "3":
+      document.getElementById('pizzaSize').innerHTML = "Large";
+      return;
+      default:
+      console.log("bug in changeSliderLabel");
+    }
+  }
+```
+
+Optimize loops by extracting redundant calculations.
 
 #### Before:
 ```
@@ -74,22 +115,24 @@ Replace more complex and less performant querySelectorAll methods with getElemen
     var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
 ```
+
 #### After:
 ```
-var top = document.body.scrollTop;
+  var top = document.body.scrollTop;
+  // pre-populate array with constants
   var constArray = [];
   for (i = 0; i < 5; i++) {
     constArray.push(Math.sin((top / 1250) + i));
   }
-
   var items = document.getElementsByClassName('mover');
-  for (var i = 0; i < items.length; i++) {
+  // store array length for efficiency
+  for (var i = 0, l = items.length; i < l; i++) {
     var phase = constArray[i % 5];
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 ```
 
-Eliminate unnecessary logic that causes repetitive reads and writes to the DOM layout. Cache DOM elements that are reused.
+Eliminate unnecessary logic that causes repetitive reads and writes to the DOM. Cache DOM elements that are reused.
 
 #### Before:
 ```
@@ -126,10 +169,12 @@ Eliminate unnecessary logic that causes repetitive reads and writes to the DOM l
 ```
 #### After:
 ```
+   /* modified and combined two functions into one */
   function changePizzaSizes(size) {
 
     var newwidth = 0;
 
+    // moved switch statement here from eliminated determineDx function 
     switch(size) {
       case "1":
       newwidth = 25;
@@ -144,13 +189,117 @@ Eliminate unnecessary logic that causes repetitive reads and writes to the DOM l
       console.log("bug in sizeSwitcher");
     }
 
+    // cache DOM element since it is reused
     var pizzas = document.getElementsByClassName('randomPizzaContainer');
-    for (var i = 0; i < pizzas.length; i++) {
+    // store array length in initializer statement for efficiency
+    for (var i = 0, l = pizzas.length; i < l; i++) {
+      // set width as % without unnecessary calculations
       pizzas[i].style.width = newwidth + "%";
     }
   }
 ```
 
+#### Before:
+```
+for (var i = 2; i < 100; i++) {
+  var pizzasDiv = document.getElementById("randomPizzas");
+  pizzasDiv.appendChild(pizzaElementGenerator(i));
+}
+```
+
+#### After: 
+```
+// cache DOM element outside of for loop
+var pizzasDiv = document.getElementById('randomPizzas');
+for (var i = 2; i < 100; i++) {
+  pizzasDiv.appendChild(pizzaElementGenerator(i));
+}
+```
+
+Prevent creation of redundant variables and calls to the DOM.
+
+#### Before:
+```
+for (var i = 0; i < 200; i++) {
+    var elem = document.createElement('img');
+    elem.className = 'mover';
+    elem.src = "images/pizza.png";
+    elem.style.height = "100px";
+    elem.style.width = "73.333px";
+    elem.basicLeft = (i % cols) * s;
+    elem.style.top = (Math.floor(i / cols) * s) + 'px';
+    document.querySelector("#movingPizzas1").appendChild(elem);
+  }
+```
+
+#### After:
+```
+  // cache DOM element used in for loop
+  var movingPizzas = document.getElementById('movingPizzas1');
+
+  // declare elem in for loop initializer to prevent recreation
+  for (var i = 0, elem; i < 200; i++) {
+    elem = document.createElement('img');
+    elem.className = 'mover';
+    elem.src = "images/pizza.png";
+    elem.style.height = "100px";
+    elem.style.width = "73.333px";
+    elem.basicLeft = (i % cols) * s;
+    elem.style.top = (Math.floor(i / cols) * s) + 'px';
+    movingPizzas.appendChild(elem);
+  }
+```
+
+Improve rendering speeds with added CSS styles
+```
+/* add backface-visibility as hidden for increased performance*/
+* {
+  -webkit-box-sizing: border-box;
+  -webkit-backface-visibility: hidden; /* Chrome, Safari, Opera */
+  backface-visibility: hidden;
+  -moz-box-sizing: border-box;
+  -box-sizing: border-box;
+}
+```
+
+```
+/* add transform: translateZ(0) to trigger GPU */
+.mover {
+  -webkit-transform: translateZ(0); /* Chrome, Safari, Opera */
+  transform: translateZ(0);
+  position: fixed;
+  width: 256px;
+  z-index: -1;
+}
+```
+
+Replace arbitrary constant with dynamic value based on screen height to determine number of images needed to render background. 
+
+#### Before:
+```
+document.addEventListener('DOMContentLoaded', function() {
+  var cols = 8;
+  var s = 256;
+  for (var i = 0; i < 200; i++) {
+    ...
+  }
+  updatePositions();
+});
+```
+
+#### After: 
+```
+document.addEventListener('DOMContentLoaded', function() {
+  var cols = 8;
+  var s = 256;
+  // dynamically determine number of pizzas needed to fill screen
+  var numberOfPizzas = cols * (screen.height / 256); 
+  for (var i = 0; i < numberOfPizzas; i++) {
+    ...
+  }
+  updatePositions();
+});
+```
 
 ## Final Results
 ###Part 1: PageSpeed Insights score of > 90 for index.html

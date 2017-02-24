@@ -1,6 +1,4 @@
-/** {
-  outline: 1px solid red !important;
-}*/
+/* add backface-visibility as hidden for increased performance*/
 * {
   -webkit-box-sizing: border-box;
   -webkit-backface-visibility: hidden; /* Chrome, Safari, Opera */
@@ -31,10 +29,13 @@ form {
   font-weight: 800;
 }
 
+/* trigger hardware accelerated CSS with *-transform */
 .mover {
-  position: fixed;
-  width: 256px;
-  z-index: -1;
+ -webkit-transform: translateZ(0); /* Chrome, Safari, Opera */
+ transform: translateZ(0);
+ position: fixed;
+ width: 256px;
+ z-index: -1;
 }
 
 .randomPizzaContainer {

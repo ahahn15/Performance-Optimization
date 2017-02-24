@@ -381,7 +381,7 @@ var pizzaElementGenerator = function(i) {
 var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");
 
-
+  // use getElementById instead of querySelector
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
@@ -400,14 +400,12 @@ var resizePizzas = function(size) {
 
   changeSliderLabel(size);
 
-  /** modify and combine two functions into one:
-    after eliminating getDx function, moved switch statement into changePizzaSizes
-    and modified to return size as a value between 0-100 and set with % instead of 
-    returning as a decimal and performing unnecessary calculations. **/
+  /* modified and combined two functions into one */
   function changePizzaSizes(size) {
 
     var newwidth = 0;
 
+    // moved switch statement here from eliminated determineDx function 
     switch(size) {
       case "1":
       newwidth = 25;
@@ -424,7 +422,9 @@ var resizePizzas = function(size) {
 
     // cache DOM element since it is reused
     var pizzas = document.getElementsByClassName('randomPizzaContainer');
-    for (var i = 0; i < pizzas.length; i++) {
+    // store array length in initializer statement for efficiency
+    for (var i = 0, l = pizzas.length; i < l; i++) {
+      // set width as % without unnecessary calculations
       pizzas[i].style.width = newwidth + "%";
     }
   }
@@ -438,6 +438,7 @@ var resizePizzas = function(size) {
 };
 
 window.performance.mark("mark_start_generating");
+// cache DOM element outside of for loop
 var pizzasDiv = document.getElementById('randomPizzas');
 for (var i = 2; i < 100; i++) {
   pizzasDiv.appendChild(pizzaElementGenerator(i));
@@ -460,18 +461,20 @@ function logAverageFrame(times) {
 }
 
 /** extracted out a calculation that essentially returned one of 5 constants
-  and turned it into an array instead. Cache more DOM elements. **/
+  and turned it into an array instead. **/
 function updatePositions() {
-  var items = document.getElementsByClassName('mover');
   frame++;
   window.performance.mark("mark_start_frame");
+  // cache DOM element
   var top = document.body.scrollTop;
+  // pre-populate array with constants
   var constArray = [];
   for (i = 0; i < 5; i++) {
     constArray.push(Math.sin((top / 1250) + i));
   }
-
-  for (var i = 0; i < items.length; i++) {
+  var items = document.getElementsByClassName('mover');
+  // store array length for efficiency
+  for (var i = 0, l = items.length; i < l; i++) {
     var phase = constArray[i % 5];
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
@@ -488,16 +491,21 @@ window.addEventListener('scroll', updatePositions);
 
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
+  // dynamically determine number of pizzas needed to fill screen
+  var numberOfPizzas = cols * (screen.height / 256);
   var s = 256;
-  for (var i = 0; i < 200; i++) {
-    var elem = document.createElement('img');
+  // cache DOM element used in for loop
+  var movingPizzas = document.getElementById('movingPizzas1');
+  // declare elem in for loop initializer to prevent recreation
+  for (var i = 0, elem; i < numberOfPizzas; i++) {
+    elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.getElementById('movingPizzas1').appendChild(elem);
+    movingPizzas.appendChild(elem);
   }
   updatePositions();
 });
