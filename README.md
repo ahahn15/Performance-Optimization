@@ -318,5 +318,5 @@ Time to resize pizzas: 89.32999999999993ms
 
 ####After:
 
-Average scripting time to generate last 10 frames: 0.335999999998603ms  
-Time to resize pizzas: 0.34500000000116415ms
+Average scripting time to generate last 10 frames: 0.13300000000006093ms 
+Time to resize pizzas: 0.38500000000203727ms
