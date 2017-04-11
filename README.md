@@ -1,7 +1,7 @@
 # Website Performance Optimization project
 *Project #4 of the Udacity Front End Developer Nanodegree*
 
-This project required optimizing the critical rendering path in order to achieve:  
+This project required optimizing the critical rendering path in order to achieve:
 
 1. A PageSpeed Insights score of at least 90 on index.html
 2. At least 60 fps scrolling and resizing pizza images on pizza.html
@@ -15,57 +15,57 @@ The website is hosted on Github pages:
 
 The project uses Grunt tasks to minify CSS, HTML, images, and JS files.
 
-###Install Grunt
+### Install Grunt
 
 `npm install -g grunt`
 
 
-###Run Grunt
-- `grunt`  
+### Run Grunt
+- `grunt`
 The default Grunt command runs the uglify, imagemin, htmlmin, and cssmin tasks. Details are below.
 
-- `grunt uglify`  
+- `grunt uglify`
 Minifies all JavaScript files in src/ and saves to dist/.
 More [here](https://github.com/gruntjs/grunt-contrib-uglify)
 
-- `grunt imagemin`  
+- `grunt imagemin`
 Compresses all .png and .jpg images in src/ and saves to dist/.
 More [here](https://github.com/gruntjs/grunt-contrib-imagemin)
 
-- `grunt htmlmin`  
+- `grunt htmlmin`
 Minifies all html files in src/ and saves to dist/. Removes comments and collapses whitespace.
 More [here](https://github.com/gruntjs/grunt-contrib-htmlmin)
 
-- `grunt cssmin`  
+- `grunt cssmin`
 Minifies all CSS files in src/ and saves to dist/.
 More [here](https://github.com/gruntjs/grunt-contrib-cssmin)
 
-###Publish changes
+### Publish changes
 The GitHub Pages site is configured to be built from the gh-pages branch, so in order to see changes applied, the dist directory should be pushed to that branch:
 
 `git subtree push --prefix dist origin gh-pages`
 
 
 ## Optimizations
-###Part 1: PageSpeed Insights score of > 90 for index.html
+### Part 1: PageSpeed Insights score of > 90 for index.html
 
-####CSS
+#### CSS
 
 Remove blocking CSS by inlining the relatively small number of styles into the head of the document.
 
 Add the HTML media="print" attribute to the external style sheet link for print styles.
 
-####JS
+#### JS
 
 Add the HTML async attribute to all script tags.
 
-####Images
+#### Images
 
-Resize images to 100px in width to match the size in the view. Use the Grunt task to compress. 
+Resize images to 100px in width to match the size in the view. Use the Grunt task to compress.
 
-###Part 2: 60 frames per second on pizza page
+### Part 2: 60 frames per second on pizza page
 
-Replace more complex and less performant querySelectorAll methods with getElementsByClassName and getElementById. 
+Replace more complex and less performant querySelectorAll methods with getElementsByClassName and getElementById.
 
 #### Before:
 ```
@@ -174,7 +174,7 @@ Eliminate unnecessary logic that causes repetitive reads and writes to the DOM. 
 
     var newwidth = 0;
 
-    // moved switch statement here from eliminated determineDx function 
+    // moved switch statement here from eliminated determineDx function
     switch(size) {
       case "1":
       newwidth = 25;
@@ -207,7 +207,7 @@ for (var i = 2; i < 100; i++) {
 }
 ```
 
-#### After: 
+#### After:
 ```
 // cache DOM element outside of for loop
 var pizzasDiv = document.getElementById('randomPizzas');
@@ -273,7 +273,7 @@ Improve rendering speeds with added CSS styles
 }
 ```
 
-Replace arbitrary constant with dynamic value based on screen height to determine number of images needed to render background. 
+Replace arbitrary constant with dynamic value based on screen height to determine number of images needed to render background.
 
 #### Before:
 ```
@@ -287,13 +287,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 ```
 
-#### After: 
+#### After:
 ```
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
   // dynamically determine number of pizzas needed to fill screen
-  var numberOfPizzas = cols * (screen.height / 256); 
+  var numberOfPizzas = cols * (screen.height / 256);
   for (var i = 0; i < numberOfPizzas; i++) {
     ...
   }
@@ -302,21 +302,21 @@ document.addEventListener('DOMContentLoaded', function() {
 ```
 
 ## Final Results
-###Part 1: PageSpeed Insights score of > 90 for index.html
+### Part 1: PageSpeed Insights score of > 90 for index.html
 
-####Before:
+#### Before:
 Mobile: 27/100      Desktop 29/100
 
-####After:
+#### After:
 Mobile: 92/100      Desktop 95/100
 
-###Part 2: 60 frames per second on pizza page (~10 ms)
+### Part 2: 60 frames per second on pizza page (~10 ms)
 
-####Before:
-Average scripting time to generate last 10 frames: 30.921000000000106ms  
+#### Before:
+Average scripting time to generate last 10 frames: 30.921000000000106ms
 Time to resize pizzas: 89.32999999999993ms
 
-####After:
+#### After:
 
-Average scripting time to generate last 10 frames: 0.13300000000006093ms 
+Average scripting time to generate last 10 frames: 0.13300000000006093ms
 Time to resize pizzas: 0.38500000000203727ms
